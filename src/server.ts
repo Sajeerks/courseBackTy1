@@ -2,6 +2,7 @@ import app  from "./app";
 import dotenv from "dotenv"
 import { connectToDatabase } from "./database/database";
 dotenv.config({path:"../backend/config/config.env"})
+import cloudinay from "cloudinary"
 
 
 process.on("uncaughtException", (err:Error)=>{
@@ -11,6 +12,12 @@ process.on("uncaughtException", (err:Error)=>{
   
 })
 
+
+cloudinay.v2.config({
+    cloud_name:process.env.CLOUDINARY_NAME,
+    api_key:process.env.CLOUDINARY_API_KEY,
+    api_secret:process.env.CLOUDINARY_SECRET
+})
 
 connectToDatabase()
 

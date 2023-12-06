@@ -18,6 +18,12 @@ export interface UserTypeForCretaingSchema   {
         url: string;
     } | undefined;
     resetPasswordToken?: string | undefined;
+
+    playlist:{
+      course:string, 
+      poster:string
+
+    }[],
 }
 
 export interface UseSchemaMethods {

@@ -5,6 +5,7 @@ import { UseSchemaMethods, userModel } from "../models/userModel";
 import { sendToken } from "../utils/sendToken";
 import { sendEmail } from "../utils/sendEmail";
 import crypto from "crypto";
+import { courseModel } from "../models/courseModel";
  
 
 export const register = catchAsyncErrors(
@@ -16,7 +17,7 @@ export const register = catchAsyncErrors(
     }
 
     let user = await userModel.findOne({ email: email });
-    if (!user) {
+    if (user) {
       return next(
         new ErrorHandler(`user with email address ${email} already exists`, 400)
       );
@@ -204,6 +205,80 @@ export const resetPassword= catchAsyncErrors(
       user,
       success: true,
       message: "user password changed successfully",
+    });
+  }
+);
+
+export const addToPlaylist= catchAsyncErrors(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const user = await userModel.findById(req.user._id) 
+
+  
+
+    if (!user) {
+      return next(new ErrorHandler(`user not logged in `, 404));
+    }
+    console.log("req.body.id",req.body.id);
+
+    const  course = await courseModel.findById(req.body.id)
+    if (!course) {
+      return next(new ErrorHandler(`wrong course Id `, 404));
+    }
+const itemsExist = user.playlist.find((item)=>{
+  if(item.course.toString() === course._id.toString() ){
+    return true
+  }
+})
+  if(itemsExist)return next(new ErrorHandler("item already exist", 409))
+
+
+
+
+  
+
+    user.playlist.push({
+    course:course._id.toString(),
+    poster:course.poster?.url!
+   })
+     
+    await user.save();
+
+    res.status(200).json({
+      user,
+      success: true,
+      message: `course added successfully `,
+    });
+  }
+);
+
+
+export const removeFromPlaylist= catchAsyncErrors(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const user = await userModel.findById(req.user._id) 
+
+  
+
+    if (!user) {
+      return next(new ErrorHandler(`emial or password not correct`, 404));
+    }
+ const course = await courseModel.findById(req.query.id)
+    if (!course) {
+      return next(new ErrorHandler(`wrong course Id `, 404));
+    }
+
+
+
+    
+ 
+    
+ const newPlaylist =    user.playlist.filter(singlePlaylist=>singlePlaylist.course.toString()!== course._id.toString())
+    user.playlist =newPlaylist
+    await user.save();
+
+    res.status(200).json({
+      user,
+      success: true,
+      message: `course deleted successfully `,
     });
   }
 );

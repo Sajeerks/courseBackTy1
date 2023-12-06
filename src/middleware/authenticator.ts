@@ -20,3 +20,32 @@ export const isAuthenticated =catchAsyncErrors(async(req:Request, res:Response,n
   next()
 
 })
+
+
+
+
+
+export const authorizedRoles =(...roles:string[])=>{
+
+
+return  ((req:Request, res:Response,next:NextFunction)=>{
+  if(!roles.includes(req.user.role)){
+    return next(new ErrorHandler(`user with role ${req.user.role} is not allowed to view this resource`, 400))
+  }
+next()
+})
+ 
+
+}
+
+
+
+
+// export const authoizedRoles =(...roles:string[]) =>(req:Request, res:Response,next:NextFunction)=>{
+
+//   if(!roles.includes(req.user.role)){
+//     return next(new ErrorHandler(`user with role ${req.user.role} is not allowed to view this resource`, 400))
+//   }
+// next()
+
+// }

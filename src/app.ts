@@ -7,8 +7,9 @@ import path from 'path'
 import cookieParser from "cookie-parser"
 import fileUpload  from "express-fileupload" 
 import  errorMiddleware  from "./middleware/errorMiddleware";
+import bodyParser from 'body-parser'
 
-app.use(fileUpload())
+// app.use(fileUpload())
 
 app.use(express.json())
 app.use(
@@ -16,14 +17,37 @@ app.use(
       extended: true,
     })
   );
-  app.use(cookieParser())
-  // app.use(cors({
-  //   origin: process.env.FRONTEND_URL!,
 
-  //   credentials: true,
-  //   // methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH']
-  //   methods: ["GET", "POST", "PUT", "DELETE"],
-  // }))
+//   app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({extended: true}));
+
+  app.use(cookieParser())
+  app.use(cors({
+    origin: process.env.FRONTEND_URL!,
+
+    credentials: true,
+    // methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH']
+    methods: ["GET", "POST", "PUT", "DELETE"],
+  }))
+
+
+
+
+// Using Middlewares
+// app.use(bodyParser.json({ type: 'application/*+json' }))
+
+
+// app.use(
+//   bodyParser.urlencoded({
+//     extended: true,
+//   })
+// );
+
+
+
+
+
+
 
 import courseRouter from "./routes/courseRoutes"; 
 import userRouter from "./routes/userRoutes";
