@@ -1,3 +1,4 @@
+import cloudinay  from 'cloudinary';
 import { NextFunction, Response, Request } from "express";
 import { catchAsyncErrors } from "../middleware/catchAsyncErrors";
 import ErrorHandler from "../utils/ErrorHandler";
@@ -6,12 +7,13 @@ import { sendToken } from "../utils/sendToken";
 import { sendEmail } from "../utils/sendEmail";
 import crypto from "crypto";
 import { courseModel } from "../models/courseModel";
+import getDataUri from "../utils/dataUri";
  
 
 export const register = catchAsyncErrors(
   async (req: Request, res: Response, next: NextFunction) => {
     const { name, email, password } = req.body;
-    // const file = req.file
+  //  console.log(req.body);
     if (!name || !email || !password) {
       return next(new ErrorHandler("please enter all fileds", 400));
     }
@@ -22,13 +24,21 @@ export const register = catchAsyncErrors(
         new ErrorHandler(`user with email address ${email} already exists`, 400)
       );
     }
+
+     
+    const file = req.file
+       let fileUri=   getDataUri(file!)
+  const myCloud  = await cloudinay.v2.uploader.upload(fileUri.content!)
+
+
+    
     let newUser = await userModel.create({
       email,
       name,
       password,
       avatar: {
-        public_id: "sample publi id",
-        url: "https://plus.unsplash.com/premium_photo-1680740103993-21639956f3f0?q=80&w=1888&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        public_id: myCloud.public_id,
+        url: myCloud.secure_url
       },
     });
 
@@ -125,6 +135,15 @@ export const changePassword = catchAsyncErrors(
 export const updateUserProfile= catchAsyncErrors(
   async (req: Request, res: Response, next: NextFunction) => {
     const { name, email  } = req.body;
+
+       
+    const file = req.file
+    // console.log("file---", file);
+       let fileUri=   getDataUri(file!)
+  const myCloud  = await cloudinay.v2.uploader.upload(fileUri.content!)
+
+   
+
    
 
     let user = await userModel.findById(req.user._id).select("+password");
@@ -139,6 +158,15 @@ export const updateUserProfile= catchAsyncErrors(
    if(email){
     user.email = email
    }
+  if(file){
+     await cloudinay.v2.uploader.destroy(user.avatar?.public_id!).then(res=>{
+      console.log(`aftering delting the avatar image of user res is ===  ${res}`);
+     })
+    user.avatar!.public_id! = myCloud.public_id
+    user.avatar?.url!= myCloud.secure_url
+
+  }
+
     await user.save();
 
     res.status(200).json({
@@ -279,6 +307,126 @@ export const removeFromPlaylist= catchAsyncErrors(
       user,
       success: true,
       message: `course deleted successfully `,
+    });
+  }
+);
+
+
+export const getAllUsers= catchAsyncErrors(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const users = await userModel.find()
+
+  
+
+    if (!users) {
+      return next(new ErrorHandler(`emial or password not correct`, 404));
+    }
+ 
+    res.status(200).json({
+      users,
+      success: true,
+      message: `all users data fetched successfully `,
+    });
+  }
+);
+
+
+export const updateUserRole= catchAsyncErrors(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const user = await userModel.findById(req.params.id)
+
+  
+
+    if (!user) {
+      return next(new ErrorHandler(`emial or password not correct`, 404));
+    }
+
+    const {role} = req.body
+
+    user.role=  role
+    await user.save()
+ 
+    res.status(200).json({
+      user,
+      success: true,
+      message: ` users data updated successfully `,
+    });
+  }
+);
+
+
+export const deleteUser= catchAsyncErrors(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const user = await userModel.findById(req.params.id)
+
+  
+
+    if (!user) {
+      return next(new ErrorHandler(`emial or password not correct`, 404));
+    }
+      await cloudinay.v2.uploader.destroy(user.avatar?.public_id!).then(res=>{
+        console.log(`res after deleting user ==${res}`);
+      })
+    
+    await userModel.findByIdAndDelete(req.params.id)
+ 
+    res.status(200).json({
+
+      success: true,
+      message: ` user with id ${req.params.id} deleted successfully `,
+    });
+  }
+);
+
+
+export const getUserDetailsForAdmin= catchAsyncErrors(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const user = await userModel.findById(req.params.id)
+
+  
+
+    if (!user) {
+      return next(new ErrorHandler(`emial or password not correct`, 404));
+    }
+
+    
+  
+ 
+    res.status(200).json({
+  user,
+      success: true,
+      message: ` user with id ${req.params.id} fetched successfully `,
+    });
+  }
+);
+
+
+export const deleteMYProfile= catchAsyncErrors(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const user = await userModel.findById(req.user._id)
+  const userID = req.user._id
+  
+
+  
+      await cloudinay.v2.uploader.destroy(req.user.avatar?.public_id!).then(res=>{
+        console.log(`res after deleting  mY  user ==${res}`);
+      })
+    
+    await userModel.findByIdAndDelete(req.user._id)
+
+  const cookieOptions ={
+   expires: new Date(Date.now()),
+       httpOnly: true,
+      secure : false,
+      sameSite:"none" as "none"
+  }
+ 
+
+ 
+    res.status(200).cookie("token",null, cookieOptions).json({
+
+      success: true,
+      message: ` user with id ${userID} deleted successfully `,
     });
   }
 );

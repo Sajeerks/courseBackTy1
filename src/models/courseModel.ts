@@ -1,7 +1,36 @@
-import mongoose from "mongoose";
+import mongoose, { InferSchemaType } from "mongoose";
 
 
-const courseSchema = new mongoose.Schema({
+interface CousseModelType{
+  _id?:string
+  title:string,
+  description:string,
+  lectures:{
+    _id?:string
+    title: string;
+    description: string;
+    video?: {
+        public_id: string;
+        url: string;
+    }
+  }[] 
+
+  poster?: {
+    public_id: string;
+    url: string;
+} | null | undefined
+views:number
+numOfVideos:number
+category:string
+createdBy:string
+createdAt:Date
+
+
+
+}
+
+
+const courseSchema = new mongoose.Schema<CousseModelType>({
     title: {
       type: String,
       required: [true, "Please enter course title"],
@@ -68,6 +97,12 @@ const courseSchema = new mongoose.Schema({
       default: Date.now,
     },
   });
+
+
+  type COurseTyle = InferSchemaType<typeof courseSchema>;
+
+
+
 
 
 export const courseModel = mongoose.model("courseModel", courseSchema);

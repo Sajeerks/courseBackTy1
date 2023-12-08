@@ -3,6 +3,7 @@ import dotenv from "dotenv"
 import { connectToDatabase } from "./database/database";
 dotenv.config({path:"../backend/config/config.env"})
 import cloudinay from "cloudinary"
+import Razorpay  from "razorpay";
 
 
 process.on("uncaughtException", (err:Error)=>{
@@ -20,6 +21,12 @@ cloudinay.v2.config({
 })
 
 connectToDatabase()
+
+
+export const instance = new Razorpay({
+    key_id:process.env.RAZOR_PAY_KEY!,
+    key_secret:process.env.RAZOR_PAY_SECRET!
+})
 
 
 const server = app.listen(process.env.PORT, ()=>{

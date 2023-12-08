@@ -10,7 +10,10 @@ export interface UserTypeForCretaingSchema   {
     email: string;
     password: string;
     role: string;
-    
+    subscription:{
+      id:string | undefined
+      status:string | undefined
+    }
 
     resetPasswordExpire?: Date | undefined;
     avatar?: {
@@ -23,7 +26,9 @@ export interface UserTypeForCretaingSchema   {
       course:string, 
       poster:string
 
-    }[],
+    }[]
+
+  
 }
 
 export interface UseSchemaMethods {

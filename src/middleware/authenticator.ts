@@ -38,6 +38,13 @@ next()
 
 }
 
+export const authorizeSubscribers =(req:Request, res:Response,next:NextFunction)=>{
+  if(req.user.subscription.status !== "active"  && req.user.role !=="admin"){
+    return next(new ErrorHandler("Only subscribers can access this message", 403))
+  }
+  next()
+}
+
 
 
 
