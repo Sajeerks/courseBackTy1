@@ -4,6 +4,8 @@ import { connectToDatabase } from "./database/database";
 dotenv.config({path:"../backend/config/config.env"})
 import cloudinay from "cloudinary"
 import Razorpay  from "razorpay";
+import nodeCron  from 'node-cron'
+import { statsModel } from "./models/statusModel";
 
 
 process.on("uncaughtException", (err:Error)=>{
@@ -27,6 +29,21 @@ export const instance = new Razorpay({
     key_id:process.env.RAZOR_PAY_KEY!,
     key_secret:process.env.RAZOR_PAY_SECRET!
 })
+
+
+nodeCron.schedule("0 0 0 1 * *", async()=>{
+    console.log("a");
+    try {
+        await statsModel.create({})
+    } catch (error) {
+        console.log(error);
+    }
+})
+
+// const temp =async()=>{
+//     await statsModel.create({})
+// }
+// temp()
 
 
 const server = app.listen(process.env.PORT, ()=>{

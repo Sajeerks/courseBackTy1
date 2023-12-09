@@ -8,6 +8,7 @@ import { sendEmail } from "../utils/sendEmail";
 import crypto from "crypto";
 import { courseModel } from "../models/courseModel";
 import getDataUri from "../utils/dataUri";
+import { statsModel } from '../models/statusModel';
  
 
 export const register = catchAsyncErrors(
@@ -430,3 +431,15 @@ export const deleteMYProfile= catchAsyncErrors(
     });
   }
 );
+
+
+userModel.watch().on("change" , async()=>{
+  console.log("inside the watch in userconstorller");
+  const stats = await statsModel.find({}).sort({createdAt:"desc"}).limit(1)
+  const subscriptions = await userModel.find({"subscription.status":"active"})
+  stats[0].users = await userModel.countDocuments()
+  stats[0].subscription = subscriptions.length
+  stats[0].createdAt = new Date(Date.now())
+
+  await stats[0].save()
+})

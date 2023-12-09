@@ -4,17 +4,32 @@ import { courseModel } from '../models/courseModel';
 import { catchAsyncErrors } from '../middleware/catchAsyncErrors';
 import ErrorHandler from '../utils/ErrorHandler';
 import getDataUri from '../utils/dataUri';
+import { statsModel } from '../models/statusModel';
+import { ApiFeatures } from '../utils/apiFeatures';
 
 
 export const getAllCourses = catchAsyncErrors( async(req:Request, res:Response, next:NextFunction)=>{
     
+  const apiFeatures = new ApiFeatures(courseModel.find().select("-lectures"), req.query).search().filter()
 
-    const allCourses = await courseModel.find().select("-lectures")
+   const resultPerPage = 2 
+    let allCourses = await apiFeatures.query;
+    let filteredCoursesCount: Number = 0;
     // const allCourses ="sssssssssssssssssssss"
     // console.log({allCourses});
+    if (allCourses) {
+        filteredCoursesCount = allCourses.length;
+      } else {
+        filteredCoursesCount = 0;
+      }
+      apiFeatures.pagination(resultPerPage)
+  
+      allCourses = await apiFeatures.query.clone(); 
+
     res.status(200).json({
         success:true,
         allCourses, 
+        filteredCoursesCount,
         message:" All products send successfully"
     })
 })
@@ -204,4 +219,23 @@ export const deleteSingleLecture = catchAsyncErrors( async(req:Request, res:Resp
         success:true,
         message:`lecture with id id ${lectureId} was deleted successfully`
     })
+})
+
+
+
+courseModel.watch().on("change" , async()=>{
+    console.log("inside the watch in userconstorller");
+  const stats = await statsModel.find({}).sort({createdAt:"desc"}).limit(1)
+    const courses = await courseModel.find({})
+    let totalViews = 0 
+    for (let i = 0; i < courses.length; i++) {
+       totalViews += courses[i].views          
+       
+    }
+
+    stats[0].views = totalViews
+    stats[0].createdAt = new Date(Date.now())
+
+
+  await stats[0].save()
 })

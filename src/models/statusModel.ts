@@ -1,6 +1,13 @@
 
 import mongoose from "mongoose";
 
+interface  StatsModelType {
+  users:number
+  subscription:number,
+  views:number
+  createdAt:Date
+}
+
 const statSchema = new mongoose.Schema({
   users: {
     type: Number,
@@ -23,5 +30,10 @@ const statSchema = new mongoose.Schema({
   },
 });
 
-export const statsModel = mongoose.model("statsModel", statSchema);
+
+
+
+
+
+export const statsModel = mongoose.model<StatsModelType>("statsModel", statSchema);
  
