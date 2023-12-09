@@ -11,6 +11,7 @@ export  class ApiFeatures{
     }
 
     search(){
+        console.log("this.queryStr==",this.queryStr);
         let keyword = this.queryStr?.keyword?{
             title:{
                 $regex:this.queryStr.keyword,
