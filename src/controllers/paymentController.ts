@@ -45,9 +45,11 @@ export const paymentVerification = catchAsyncErrors(
   async (req: Request, res: Response, next: NextFunction) => {
     const user = await userModel.findById(req.user._id);
     if (!user) return next(new ErrorHandler("please login to subscribe", 400));
-
+ 
     const { razorpay_payment_id, razorpay_order_id, razorpay_signature } =
       req.body;
+
+      console.log( razorpay_payment_id, razorpay_order_id, razorpay_signature );
     const subscirption_id = user.subscription.id;
     const generated_signature = crypto
       .createHmac("sha256", process.env.RAZOR_PAY_SECRET!)
