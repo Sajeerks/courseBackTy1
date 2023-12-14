@@ -7,7 +7,7 @@ import { buySubscription, getRazorPayKey, paymentVerification,cancelSubscription
 const paymentRouter = express.Router();
 
 paymentRouter.route("/subscribe").get(isAuthenticated, buySubscription)
-paymentRouter.route("/paymentVerificatin").get(isAuthenticated, paymentVerification)
+paymentRouter.route("/paymentVerificatin").post(isAuthenticated, paymentVerification)
 paymentRouter.route("/getRazorPayKey").get( getRazorPayKey)
 paymentRouter.route("/subscribe/cancel").delete(isAuthenticated, cancelSubscription)
 
