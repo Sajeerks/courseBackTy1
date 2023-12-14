@@ -48,7 +48,7 @@ export const paymentVerification = catchAsyncErrors(
  
     const { razorpay_payment_id, razorpay_order_id, razorpay_signature } =
       req.body;
-
+     console.log(req.body);
       console.log( razorpay_payment_id, razorpay_order_id, razorpay_signature );
     const subscirption_id = user.subscription.id;
     const generated_signature = crypto
