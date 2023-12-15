@@ -46,23 +46,25 @@ export const paymentVerification = catchAsyncErrors(
     const user = await userModel.findById(req.user._id);
     if (!user) return next(new ErrorHandler("please login to subscribe", 400));
  
-    const { razorpay_payment_id, razorpay_order_id, razorpay_subscription_id } =
-      req.body;
-     console.log(req.body);
-      console.log( razorpay_payment_id, razorpay_order_id, razorpay_subscription_id );
-    const subscirption_id = user.subscription.id;
-    const generated_signature = crypto
-      .createHmac("sha256", process.env.RAZOR_PAY_SECRET!)
-      .update(razorpay_payment_id + "|" + subscirption_id, "utf-8")
-      .digest("hex");
-    const isAuthenic = generated_signature === razorpay_subscription_id;
+    const { razorpay_signature, razorpay_payment_id, razorpay_subscription_id } =
+    req.body;
 
-    if (!isAuthenic) {
+ console.log(req.body);
+
+  const subscription_id = user.subscription.id;
+
+  const generated_signature = crypto
+    .createHmac("sha256", process.env.RAZOR_PAY_SECRET!)
+    .update(razorpay_payment_id + "|" + subscription_id, "utf-8")
+    .digest("hex");
+
+  const isAuthentic = generated_signature === razorpay_signature;
+    if (!isAuthentic) {
       return res.redirect(`${process.env.FRONTEND_URL!}/paymentFailed`);
     }
     await paymentModel.create({
+      razorpay_signature,
       razorpay_payment_id,
-      razorpay_order_id,
       razorpay_subscription_id,
     });
     user.subscription.status = "active";
