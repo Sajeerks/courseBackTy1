@@ -43,7 +43,7 @@ export const createNewCourse = catchAsyncErrors( async(req:Request, res:Response
    }
      
    const file = req.file
-    // console.log("file----", file);
+    console.log("file----", file);
 
   
        let fileUri=   getDataUri(file!)
