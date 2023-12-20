@@ -19,7 +19,10 @@ export const getAllCourses = catchAsyncErrors( async(req:Request, res:Response, 
     console.log("equal in stringfying req.query");
     nodecache.del(["allCourses", "filteredCoursesCount"])
   }
-
+  if(req.query.page === '1') {
+    console.log("equal in stringfying req.query");
+    nodecache.del(["allCourses", "filteredCoursesCount"])
+  }
 
 
    const resultPerPage = 2 
