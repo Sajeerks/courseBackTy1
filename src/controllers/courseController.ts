@@ -7,8 +7,7 @@ import getDataUri from '../utils/dataUri';
 import { statsModel } from '../models/statusModel';
 import { ApiFeatures } from '../utils/apiFeatures';
 import { nodecache } from '../app';
-import { json } from 'body-parser';
-
+import _ from 'lodash'
 
 export const getAllCourses = catchAsyncErrors( async(req:Request, res:Response, next:NextFunction)=>{
     
@@ -16,7 +15,7 @@ export const getAllCourses = catchAsyncErrors( async(req:Request, res:Response, 
 
   console.log("req.query--", req.query);
 
-  if(`{ page: '1' }` === JSON.stringify(req.query) ){
+  if(_.isEqual({page:"1"}, req.query) ){
     console.log("equal in stringfying req.query");
     nodecache.del(["allCourses", "filteredCoursesCount"])
   }
