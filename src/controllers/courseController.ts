@@ -14,6 +14,9 @@ export const getAllCourses = catchAsyncErrors( async(req:Request, res:Response, 
     
   const apiFeatures = new ApiFeatures(courseModel.find().select("-lectures"), req.query).search().filter()
 
+  console.log("req.query--", req.query);
+  nodecache.del(["allCourses", "filteredCoursesCount"])
+
 
    const resultPerPage = 2 
    let allCourses :any
@@ -80,7 +83,9 @@ export const createNewCourse = catchAsyncErrors( async(req:Request, res:Response
         }
 
     })
-    nodecache.del("allCourses")
+    nodecache.del(["allCourses", "filteredCoursesCount"])
+
+
         // const allCourses ="sssssssssssssssssssss"
     // console.log({allCourses});
     res.status(201).json({
