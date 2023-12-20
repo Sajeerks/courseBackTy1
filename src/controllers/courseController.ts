@@ -6,31 +6,52 @@ import ErrorHandler from '../utils/ErrorHandler';
 import getDataUri from '../utils/dataUri';
 import { statsModel } from '../models/statusModel';
 import { ApiFeatures } from '../utils/apiFeatures';
+import { nodecache } from '../app';
+import { json } from 'body-parser';
 
 
 export const getAllCourses = catchAsyncErrors( async(req:Request, res:Response, next:NextFunction)=>{
     
   const apiFeatures = new ApiFeatures(courseModel.find().select("-lectures"), req.query).search().filter()
 
+
    const resultPerPage = 2 
-    let allCourses = await apiFeatures.query;
-    let filteredCoursesCount: Number = 0;
-    // const allCourses ="sssssssssssssssssssss"
-    // console.log({allCourses});
-    if (allCourses) {
-        filteredCoursesCount = allCourses.length;
-      } else {
-        filteredCoursesCount = 0;
-      }
-      apiFeatures.pagination(resultPerPage)
+   let allCourses :any
+   let filteredCoursesCount:Number
+   if(nodecache.has("allCourses")){
+
+      allCourses = JSON.parse( nodecache.get("allCourses")!)
+      filteredCoursesCount = JSON.parse( nodecache.get("filteredCoursesCount")!)
+
+   
+   }  else {
+
+    allCourses  = await apiFeatures.query;
+    filteredCoursesCount = 0;
+   // const allCourses ="sssssssssssssssssssss"
+   // console.log({allCourses});
+   if (allCourses) {
+       filteredCoursesCount = allCourses.length;
+     } else {
+       filteredCoursesCount = 0;
+     }
+     apiFeatures.pagination(resultPerPage)
+ 
+     allCourses = await apiFeatures.query.clone(); 
+
+     nodecache.set("allCourses",JSON.stringify(allCourses))
+     nodecache.set("filteredCoursesCount",JSON.stringify(filteredCoursesCount))
+
+
+   }
   
-      allCourses = await apiFeatures.query.clone(); 
+
 
     res.status(200).json({
         success:true,
         allCourses, 
         filteredCoursesCount,
-        message:" All products send successfully"
+        message:" All allCourses send successfully"
     })
 })
 
@@ -59,6 +80,7 @@ export const createNewCourse = catchAsyncErrors( async(req:Request, res:Response
         }
 
     })
+    nodecache.del("allCourses")
         // const allCourses ="sssssssssssssssssssss"
     // console.log({allCourses});
     res.status(201).json({

@@ -8,6 +8,8 @@ import cookieParser from "cookie-parser"
 import fileUpload  from "express-fileupload" 
 import  errorMiddleware  from "./middleware/errorMiddleware";
 import bodyParser from 'body-parser'
+import morgan from 'morgan'
+import NodeCache from "node-cache"
 
 // app.use(fileUpload())
 
@@ -17,7 +19,10 @@ app.use(
       extended: true,
     })
   );
-
+app.use(morgan("tiny"))
+export const nodecache = new NodeCache({
+  stdTTL:60
+})
 //   app.use(bodyParser.json());
 // app.use(bodyParser.urlencoded({extended: true}));
 
