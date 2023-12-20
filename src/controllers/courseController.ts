@@ -15,10 +15,11 @@ export const getAllCourses = catchAsyncErrors( async(req:Request, res:Response, 
 
   console.log("req.query--", req.query);
 
-  if(_.isEqual({ page: '1' }, req.query) ){
-    console.log("equal in stringfying req.query");
-    nodecache.del(["allCourses", "filteredCoursesCount"])
-  }
+//   if(_.isEqual({ page: '1' }, req.query) ){
+//     console.log("equal in stringfying req.query");
+//     nodecache.del(["allCourses", "filteredCoursesCount"])
+//   }
+  console.log("req.query.page --",req.query.page );
   if(req.query.page === '1') {
     console.log("equal in stringfying req.query");
     nodecache.del(["allCourses", "filteredCoursesCount"])
