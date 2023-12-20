@@ -15,7 +15,11 @@ export const getAllCourses = catchAsyncErrors( async(req:Request, res:Response, 
   const apiFeatures = new ApiFeatures(courseModel.find().select("-lectures"), req.query).search().filter()
 
   console.log("req.query--", req.query);
-  nodecache.del(["allCourses", "filteredCoursesCount"])
+
+  if(JSON.stringify({ page: '1' }) === JSON.stringify(req.query) ){
+    nodecache.del(["allCourses", "filteredCoursesCount"])
+  }
+
 
 
    const resultPerPage = 2 
