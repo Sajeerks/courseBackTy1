@@ -156,28 +156,31 @@ export const updateUserProfile= catchAsyncErrors(
    if(email){
     user.email = email
    }
-
+let myCloud: cloudinay.UploadApiResponse
   if(file){
     let fileUri=   getDataUri(file!)
-    console.log("fileUri==",fileUri);
+    // console.log("fileUri==",fileUri);
 
-    const myCloud  = await cloudinay.v2.uploader.upload(fileUri.content!)
+     myCloud  = await cloudinay.v2.uploader.upload(fileUri.content!)
   
      
-     await cloudinay.v2.uploader.destroy(user.avatar?.public_id!).then(res=>{
-      console.log(`aftering delting the avatar image of user res is ===  ${res}`);
-     })
+     await cloudinay.v2.uploader.destroy(user.avatar?.public_id!)
+    //  .then(res=>{
+    //   console.log(`aftering delting the avatar image of user res is ===  ${res}`);
+    //  })
+    
      console.log("myCloud.secure_urlsssss==",myCloud.secure_url);
-    user.avatar!.public_id! =   myCloud.public_id
-    user.avatar?.url!= myCloud.secure_url
-    console.log("myCloud.secure_url==",myCloud.secure_url);
-    await user.save();
+     user.avatar!.public_id! =   myCloud.public_id
+     user.avatar?.url!= myCloud.secure_url
+     console.log("myCloud.secure_url==",myCloud.secure_url);
+   
   }
 
-
+  console.log("user.avatar?.url----before saving==",user.avatar?.url);
 
     await user.save();
-
+console.log("user saved ");
+console.log("user.avatar?.url----after saving==",user.avatar?.url);
     res.status(200).json({
       user,
       success: true,
