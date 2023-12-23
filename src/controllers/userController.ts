@@ -159,6 +159,8 @@ export const updateUserProfile= catchAsyncErrors(
 
   if(file){
     let fileUri=   getDataUri(file!)
+    console.log("fileUri==",fileUri);
+
     const myCloud  = await cloudinay.v2.uploader.upload(fileUri.content!)
   
      
