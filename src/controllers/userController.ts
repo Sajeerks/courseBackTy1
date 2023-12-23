@@ -166,6 +166,7 @@ export const updateUserProfile= catchAsyncErrors(
      })
     user.avatar!.public_id! = myCloud.public_id
     user.avatar?.url!= myCloud.secure_url
+    console.log("myCloud.secure_url==",myCloud.secure_url);
 
   }
 
