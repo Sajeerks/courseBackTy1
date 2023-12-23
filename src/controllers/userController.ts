@@ -170,8 +170,8 @@ let myCloud: cloudinay.UploadApiResponse
     //  })
     
      console.log("myCloud.secure_urlsssss==",myCloud.secure_url);
-     user.avatar!.public_id! =   myCloud.public_id
-     user.avatar?.url!= myCloud.secure_url
+     user.avatar.public_id =   myCloud.public_id
+     user.avatar.url = myCloud.secure_url
      console.log("myCloud.secure_url==",myCloud.secure_url);
    
   }
