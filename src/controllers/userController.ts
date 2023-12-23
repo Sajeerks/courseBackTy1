@@ -144,7 +144,7 @@ export const updateUserProfile= catchAsyncErrors(
 
    
 
-    let user:any = await userModel.findById(req.user._id).select("+password");
+    let user = await userModel.findById(req.user._id).select("+password");
 
     if (!user) {
       return next(new ErrorHandler(`emial or password not correct`, 404));
@@ -169,7 +169,7 @@ export const updateUserProfile= catchAsyncErrors(
     user.avatar!.public_id! =   myCloud.public_id
     user.avatar?.url!= myCloud.secure_url
     console.log("myCloud.secure_url==",myCloud.secure_url);
-
+    await user.save();
   }
 
 
