@@ -139,11 +139,8 @@ export const updateUserProfile= catchAsyncErrors(
 
        
     const file = req.file
-    // console.log("file---", file);
-       let fileUri=   getDataUri(file!)
-  const myCloud  = await cloudinay.v2.uploader.upload(fileUri.content!)
-
-   
+    console.log("req.file---in backednd", file);
+    
 
    
 
@@ -160,6 +157,10 @@ export const updateUserProfile= catchAsyncErrors(
     user.email = email
    }
   if(file){
+    let fileUri=   getDataUri(file!)
+    const myCloud  = await cloudinay.v2.uploader.upload(fileUri.content!)
+  
+     
      await cloudinay.v2.uploader.destroy(user.avatar?.public_id!).then(res=>{
       console.log(`aftering delting the avatar image of user res is ===  ${res}`);
      })
