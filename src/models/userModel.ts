@@ -16,11 +16,12 @@ export interface UserTypeForCretaingSchema   {
     }
 
     resetPasswordExpire?: Date | undefined;
+    resetPasswordToken?: string | undefined;
     avatar?: {
         public_id: string;
         url: string;
     } | undefined;
-    resetPasswordToken?: string | undefined;
+   
 
     playlist:{
       course:string, 

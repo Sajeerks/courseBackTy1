@@ -144,7 +144,7 @@ export const updateUserProfile= catchAsyncErrors(
 
    
 
-    let user = await userModel.findById(req.user._id).select("+password");
+    let user:any = await userModel.findById(req.user._id).select("+password");
 
     if (!user) {
       return next(new ErrorHandler(`emial or password not correct`, 404));
@@ -156,6 +156,7 @@ export const updateUserProfile= catchAsyncErrors(
    if(email){
     user.email = email
    }
+
   if(file){
     let fileUri=   getDataUri(file!)
     const myCloud  = await cloudinay.v2.uploader.upload(fileUri.content!)
@@ -164,11 +165,14 @@ export const updateUserProfile= catchAsyncErrors(
      await cloudinay.v2.uploader.destroy(user.avatar?.public_id!).then(res=>{
       console.log(`aftering delting the avatar image of user res is ===  ${res}`);
      })
-    user.avatar!.public_id! = myCloud.public_id
+     console.log("myCloud.secure_urlsssss==",myCloud.secure_url);
+    user.avatar!.public_id! =   myCloud.public_id
     user.avatar?.url!= myCloud.secure_url
     console.log("myCloud.secure_url==",myCloud.secure_url);
 
   }
+
+
 
     await user.save();
 
