@@ -67,6 +67,49 @@ nodecache.del(["allCourses", "filteredCoursesCount"])
 })
 
 
+
+
+export const getAllcoursesTotal = catchAsyncErrors( async(req:Request, res:Response, next:NextFunction)=>{
+    
+ const allCourses = await courseModel.find()
+
+ 
+ if(!allCourses){
+    return next( new ErrorHandler("cannnot find  all the courses ", 404))
+
+ 
+}
+  
+      res.status(200).json({
+          success:true,
+          allCourses, 
+          message:" All allCourses send successfully"
+      })
+  })
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export const createNewCourse = catchAsyncErrors( async(req:Request, res:Response, next:NextFunction)=>{
    const {title, description, category, createdBy} = req.body 
 //    console.log("req.body====",req.body);

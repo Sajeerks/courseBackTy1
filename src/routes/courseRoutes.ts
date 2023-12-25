@@ -6,6 +6,7 @@ import {
   deleteSingleLecture,
   getAllCourses,
   getLectureDetails,
+  getAllcoursesTotal,
 } from "../controllers/courseController";
 import singleUpload from "../middleware/mutler";
 import { authorizeSubscribers, authorizedRoles, isAuthenticated } from "../middleware/authenticator";
@@ -13,6 +14,12 @@ import { authorizeSubscribers, authorizedRoles, isAuthenticated } from "../middl
 const courseRouter = express.Router();
 
 courseRouter.route("/allcourses").get(getAllCourses);
+
+courseRouter.route("/allcoursesTotal").get(getAllcoursesTotal);
+
+
+
+
 courseRouter.route("/createcourse").post(singleUpload, createNewCourse);
 
 courseRouter
