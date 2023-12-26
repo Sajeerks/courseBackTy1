@@ -165,6 +165,7 @@ course.views +=1
  await course.save()
     res.status(200).json({
         success:true,
+        course:course,
         lectures:course.lectures, 
         message:"All lectures for this course send successfully"
     })
