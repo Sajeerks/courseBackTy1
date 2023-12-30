@@ -11,6 +11,7 @@ export const isAuthenticated =catchAsyncErrors(async(req:Request, res:Response,n
       }
     
     const {token } = req.cookies
+    console.log({token});
     if(!token){
         return next(new ErrorHandler("please login to veiw the resource", 400))
     }
