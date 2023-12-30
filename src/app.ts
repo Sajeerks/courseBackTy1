@@ -66,11 +66,11 @@ import otherRouter from "./routes/otherRoutes";
 
 
 
-  app.use("/api/v1",courseRouter )
+
   app.use("/api/v1",userRouter )
   app.use("/api/v1",paymentRouter )
   app.use("/api/v1",otherRouter )
-
+  app.use("/api/v1",courseRouter )
 
 
 
