@@ -18,7 +18,7 @@ courseRouter.route("/allcourses").get(getAllCourses);
 courseRouter.route("/allcoursesTotal").get(getAllcoursesTotal);
 
 
-courseRouter.route("/deletesinglelecture").post(isAuthenticated, deleteSingleLecture)
+courseRouter.route("/deletesinglelecture").delete(isAuthenticated, deleteSingleLecture)
 
 courseRouter.route("/createcourse").post(singleUpload, createNewCourse);
 
