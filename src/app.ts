@@ -34,7 +34,7 @@ export const nodecache = new NodeCache({
 
     credentials: true,
     // methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH']
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: ["GET", "POST", "PUT", "DELETE","PATCH"],
   }))
 
 

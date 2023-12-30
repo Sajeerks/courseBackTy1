@@ -259,6 +259,10 @@ await courseModel.findByIdAndDelete(req.params.id)
 export const deleteSingleLecture = catchAsyncErrors( async(req:Request, res:Response, next:NextFunction)=>{
     
    const {courseId , lectureId} = req.query
+   console.log({courseId});
+   console.log({lectureId});
+
+
    if(!courseId ||  !lectureId ){
     return next(new ErrorHandler("please add all fields" , 404))
    }
