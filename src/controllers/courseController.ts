@@ -258,7 +258,7 @@ await courseModel.findByIdAndDelete(req.params.id)
 
 export const deleteSingleLecture = catchAsyncErrors( async(req:Request, res:Response, next:NextFunction)=>{
     
-   const {courseId , lectureId} = req.query
+   const {courseId , lectureId} = req.params
    console.log({courseId});
    console.log({lectureId});
 
