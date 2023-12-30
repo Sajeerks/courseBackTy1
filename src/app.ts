@@ -13,6 +13,8 @@ import NodeCache from "node-cache"
 
 // app.use(fileUpload())
 
+
+app.use(cookieParser())
 app.use(express.json())
 app.use(
     express.urlencoded({
@@ -26,7 +28,7 @@ export const nodecache = new NodeCache({
 //   app.use(bodyParser.json());
 // app.use(bodyParser.urlencoded({extended: true}));
 
-  app.use(cookieParser())
+
   app.use(cors({
     origin: process.env.FRONTEND_URL!,
 
