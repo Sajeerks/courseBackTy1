@@ -322,3 +322,68 @@ courseModel.watch().on("change" , async()=>{
 
   await stats[0].save()
 })
+
+
+
+export const updateEntireCourse = catchAsyncErrors( async(req:Request, res:Response, next:NextFunction)=>{
+
+    const id =req.params
+
+    let course = await courseModel.findById(id)
+    if(!course){
+        return next( new ErrorHandler(`course with id ${id} not found`, 404 ))
+    }
+
+    const {title, description, category, createdBy} = req.body 
+ //    console.log("req.body====",req.body);
+    if(!title ||  !description || !category || !createdBy){
+     return next(new ErrorHandler("please add all fields" , 404))
+    }
+      
+
+    let updatedCourse 
+
+    const file = req.file
+     console.log("file----", file);
+
+     if(file){
+     
+            await cloudinay.v2.uploader.destroy(course.poster?.public_id!).then(res=>
+                 console.log("the poster is deleted ", )
+
+                )
+    
+        let fileUri=   getDataUri(file!)
+     
+        const myCloud  = await cloudinay.v2.uploader.upload(fileUri.content!)
+          
+         
+           updatedCourse = await courseModel.findByIdAndUpdate(  id, {
+              title, description, category, createdBy,
+              poster:{
+                  public_id :myCloud.public_id,
+                  url:myCloud.secure_url
+              }
+      
+          })
+     }else{
+        updatedCourse = await courseModel.findByIdAndUpdate(  id, {
+            title, description, category, createdBy,
+  
+      
+     })
+ 
+   
+    
+     nodecache.del(["allCourses", "filteredCoursesCount"])
+ 
+ 
+         // const allCourses ="sssssssssssssssssssss"
+     // console.log({allCourses});
+     res.status(201).json({
+         success:true,
+         updatedCourse,
+         message:" course updated  successfully  you can add lectures now"
+     })
+ })
+ 

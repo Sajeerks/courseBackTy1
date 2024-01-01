@@ -7,6 +7,7 @@ import {
   getAllCourses,
   getLectureDetails,
   getAllcoursesTotal,
+  updateEntireCourse,
 } from "../controllers/courseController";
 import singleUpload from "../middleware/mutler";
 import { authorizeSubscribers, authorizedRoles, isAuthenticated } from "../middleware/authenticator";
@@ -27,6 +28,7 @@ courseRouter
   .get(isAuthenticated, authorizeSubscribers,getLectureDetails)
   .post(isAuthenticated, authorizedRoles("admin"), singleUpload, addLecture)
   .delete(isAuthenticated, authorizedRoles("admin") ,deleteCourse)
+  .put(isAuthenticated, authorizedRoles("admin"), singleUpload, updateEntireCourse)
 
 
 
