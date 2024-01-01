@@ -327,7 +327,7 @@ courseModel.watch().on("change" , async()=>{
 
 export const updateEntireCourse = catchAsyncErrors( async(req:Request, res:Response, next:NextFunction)=>{
 
-    const id =req.params
+    const {id} =req.params
 
     let course = await courseModel.findById(id)
     if(!course){
@@ -335,7 +335,7 @@ export const updateEntireCourse = catchAsyncErrors( async(req:Request, res:Respo
     }
 
     const {title, description, category, createdBy} = req.body 
- //    console.log("req.body====",req.body);
+    console.log("req.body====",req.body);
     if(!title ||  !description || !category || !createdBy){
      return next(new ErrorHandler("please add all fields" , 404))
     }
