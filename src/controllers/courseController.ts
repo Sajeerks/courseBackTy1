@@ -373,7 +373,7 @@ export const updateEntireCourse = catchAsyncErrors( async(req:Request, res:Respo
       
      })
  
-   
+    }
     
      nodecache.del(["allCourses", "filteredCoursesCount"])
  
