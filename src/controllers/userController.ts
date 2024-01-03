@@ -135,7 +135,7 @@ export const changePassword = catchAsyncErrors(
 
 export const updateUserProfile= catchAsyncErrors(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { name, email  } = req.body;
+    const { name, email ,createdAt } = req.body;
 
        
     const file = req.file
@@ -156,6 +156,11 @@ export const updateUserProfile= catchAsyncErrors(
    if(email){
     user.email = email
    }
+
+   if(createdAt){
+    user.createdAt = createdAt
+   }
+
 let myCloud: cloudinay.UploadApiResponse
   if(file){
     let fileUri=   getDataUri(file!)
@@ -405,7 +410,7 @@ export const getUserDetailsForAdmin= catchAsyncErrors(
   
  
     res.status(200).json({
-  user,
+         user,
       success: true,
       message: ` user with id ${req.params.id} fetched successfully `,
     });

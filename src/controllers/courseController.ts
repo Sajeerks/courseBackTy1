@@ -237,8 +237,8 @@ await cloudinay.v2.uploader.destroy( course.poster?.public_id!)
             
                 resource_type: "video",
              
-        }).then((res)=>{
-            console.log(res);
+        }).then((res:any)=>{
+            console.log("deleted one video===",res);
         })
         // console.log("deleted video--",singleLecture.video?.public_id);
     

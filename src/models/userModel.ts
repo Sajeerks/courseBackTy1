@@ -32,7 +32,7 @@ export interface UserTypeForCretaingSchema   {
       poster:string
 
     }[]
-
+    createdAt:Date
   
 }
 
