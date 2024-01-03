@@ -195,6 +195,79 @@ console.log("user.avatar?.url----after saving==",user.avatar?.url);
 );
 
 
+
+
+export const updateUserProfileByAdmin= catchAsyncErrors(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { name, email ,createdAt } = req.body;
+
+    let user = await userModel.findById(req.params.id).select("+password");
+    
+    if (!user) {
+      return next(new ErrorHandler(` user with di ${req.params.id} is not found`, 404));
+    }
+
+       
+    const file = req.file
+    console.log("req.file---in backednd", file);
+    
+
+   
+
+
+
+
+   if(name){
+    user.name = name
+   }
+   if(email){
+    user.email = email
+   }
+
+   if(createdAt){
+    user.createdAt = createdAt
+   }
+
+let myCloud: cloudinay.UploadApiResponse
+  if(file){
+    let fileUri=   getDataUri(file!)
+    // console.log("fileUri==",fileUri);
+
+     myCloud  = await cloudinay.v2.uploader.upload(fileUri.content!)
+  
+     
+     await cloudinay.v2.uploader.destroy(user.avatar?.public_id!)
+    //  .then(res=>{
+    //   console.log(`aftering delting the avatar image of user res is ===  ${res}`);
+    //  })
+    
+     console.log("myCloud.secure_urlsssss==",myCloud.secure_url);
+     user.avatar.public_id =   myCloud.public_id
+     user.avatar.url = myCloud.secure_url
+     console.log("myCloud.secure_url==",myCloud.secure_url);
+   
+  }
+
+  console.log("user.avatar?.url----before saving==",user.avatar?.url);
+
+    await user.save();
+console.log("user saved ");
+console.log("user.avatar?.url----after saving==",user.avatar?.url);
+    res.status(200).json({
+      user,
+      success: true,
+      message: "user data  changed successfully now",
+    });
+  }
+);
+
+
+
+
+
+
+
+
 export const forgotPassword= catchAsyncErrors(
   async (req: Request, res: Response, next: NextFunction) => {
     const { email  } = req.body;

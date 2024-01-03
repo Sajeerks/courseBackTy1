@@ -1,5 +1,5 @@
 import express from "express"
-import { login, logout, register,getLoggedInUserDetails, changePassword, updateUserProfile, forgotPassword, resetPassword, addToPlaylist, removeFromPlaylist, getAllUsers, updateUserRole, deleteUser, getUserDetailsForAdmin, deleteMYProfile } from "../controllers/userController"
+import { updateUserProfileByAdmin,login, logout, register,getLoggedInUserDetails, changePassword, updateUserProfile, forgotPassword, resetPassword, addToPlaylist, removeFromPlaylist, getAllUsers, updateUserRole, deleteUser, getUserDetailsForAdmin, deleteMYProfile } from "../controllers/userController"
 import { authorizedRoles, isAuthenticated } from "../middleware/authenticator"
 import { addLecture } from "../controllers/courseController"
 import singleUpload from "../middleware/mutler"
@@ -24,7 +24,7 @@ userRouter.route("/admin/user/:id").put(isAuthenticated,authorizedRoles("admin")
 .get(isAuthenticated,authorizedRoles("admin"),getUserDetailsForAdmin)
 
 
-
+userRouter.route("/admin/updateprofile/:id").put(isAuthenticated,authorizedRoles("admin"),singleUpload, updateUserProfileByAdmin)
 
 
 
