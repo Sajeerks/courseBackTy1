@@ -189,7 +189,7 @@ console.log("user.avatar?.url----after saving==",user.avatar?.url);
     res.status(200).json({
       user,
       success: true,
-      message: "user data  changed successfully",
+      message: "user data  changed successfully now",
     });
   }
 );
