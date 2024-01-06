@@ -31,7 +31,7 @@ export const instance = new Razorpay({
 })
 
 
-nodeCron.schedule("0 0 0 1 * *", async()=>{
+nodeCron.schedule("0 0 1 * * *", async()=>{
     console.log("a");
     try {
         await statsModel.create({})
