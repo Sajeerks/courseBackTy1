@@ -42,10 +42,10 @@ nodeCron.schedule('* * * 1 * *', async()=>{
     }
 })
 
-const temp =async()=>{
-    await statsModel.create({})
-}
-temp()
+// const temp =async()=>{
+//     await statsModel.create({})
+// }
+// temp()
 
 
 const server = app.listen(process.env.PORT, ()=>{
