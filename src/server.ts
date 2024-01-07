@@ -31,10 +31,12 @@ export const instance = new Razorpay({
 })
 
 
-nodeCron.schedule("0 1 * * * *", async()=>{
-    console.log("new stats model is create created StatsModel");
+nodeCron.schedule("50 * * * * *", async()=>{
+
     try {
+        console.log("new stats model is create created StatsModel");
         await statsModel.create({})
+        console.log("new stats model is created xstats");
     } catch (error) {
         console.log(error);
     }
